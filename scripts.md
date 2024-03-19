@@ -35,18 +35,27 @@ _Adiciona o diretório data no .gitignore_
 Instalar o OpenSSL para gerar private e public key do JWT RSA256.
 Após instalado, gerou as keys utilizando o PEM: "teste", usando os scripts:
 
-- openssl genpkey -algorithm RSA -out private_key.pem -aes256
+```bash
+openssl genpkey -algorithm RSA -out private_key.pem -aes256
+```
+
+```bash
 - openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
 
 A partir disso é gerado uma versão base64 para usar no .env, utilizando os scripts abaixo no powershell:
 
-- $Content = Get-Content private_key.pem -Raw
+```bash
+$Content = Get-Content private_key.pem -Raw
 $Base64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($Content))
 $Base64 | Out-File -Encoding ASCII private_key_base64.txt
+```
 
-- $Content = Get-Content public_key.pem -Raw
+```bash
+$Content = Get-Content public_key.pem -Raw
 $Base64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($Content))
 $Base64 | Out-File -Encoding ASCII public_key_base64.txt
+```
 
 E a partir desses arquivos txt o código é colocado no .env diretamente entre aspas
 
