@@ -17,6 +17,6 @@ POST {{baseUrl}}/sessions
 Content-Type:  application/json
 
 {
-    "email": "janedoe@example.com",
+    "email": "teste@mail.com",
     "password": "123456"
 }
