@@ -2,33 +2,59 @@
 
 Instala o CLI do nestjs globalmente
 
-- npm i -g @nestjs/cli
+```bash
+npm i -g @nestjs/cli
+```
 
 Cria um novo projeto NestJs
 
-- nest new nome-do-projeto
-  escolha do pacote: pnpm
+```bash
+nest new nome-do-projeto
+```
+
+escolha do pacote: pnpm
 
 # Docker
 
 Após criar o _docker-compose.yml_, starta o docker:
 
-- docker compose up -d
-- docker ps
-  Verifica se está rodando
+```bash
+docker compose up -d
+```
+
+```bash
+docker ps
+```
+
+Verifica se está rodando
 
 _Adiciona o diretório data no .gitignore_
 
 # Prisma
 
-- pnpm i prisma -D
-- pnpm i @prisma/client
-- pnpm prisma init
-  - _Adiciona o .env no .gitignore_
-  - Altera as variáveis do docker-compose no .env
-  - Cria os models no schema.prisma
-- pnpm prisma migrate dev
-- pnpm prisma studio
+```bash
+pnpm i prisma -D
+```
+
+```bash
+pnpm i @prisma/client
+```
+
+```bash
+pnpm prisma init
+```
+
+- _Adiciona o .env no .gitignore_
+- Altera as variáveis do docker-compose no .env
+- Cria os models no schema.prisma
+
+```bash
+pnpm prisma migrate dev
+```
+
+```bash
+pnpm prisma studio
+```
 
 # Token JWT RSA256
 
@@ -40,7 +66,7 @@ openssl genpkey -algorithm RSA -out private_key.pem -aes256
 ```
 
 ```bash
-- openssl rsa -pubout -in private_key.pem -out public_key.pem
+openssl rsa -pubout -in private_key.pem -out public_key.pem
 ```
 
 A partir disso é gerado uma versão base64 para usar no .env, utilizando os scripts abaixo no powershell:
