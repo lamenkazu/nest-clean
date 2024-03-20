@@ -24,7 +24,7 @@ export class AuthenticateController {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
   @Post()
-  //   @HttpCode(200)
+  @HttpCode(200)
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body;
@@ -46,7 +46,7 @@ export class AuthenticateController {
     const accessToken = this.jwt.sign({ sub: user.id });
 
     return {
-      acess_token: accessToken,
+      access_token: accessToken,
     };
   }
 }
