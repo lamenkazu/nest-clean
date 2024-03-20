@@ -11,3 +11,5 @@ Foi configurado o arquivo jwt.strategy.ts com a public key do rsa256, e então i
 Foi também cfriada uma classe jwt-auth.guard.ts para facilitar a implementação nos Controllers.
 No client.http foi implementada uma forma automática de pegar o token da autenticação e utilizar como Header Authorization das rotas que utilizam o AuthGuard
 Nota: alteração do autenticate-controller para authenticate.controller pra manter o padrão do projeto.
+
+Neste Commit foi criado o Param Decorator que é capaz de pegar os dados do payload do user através do Token.
