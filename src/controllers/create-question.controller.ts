@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  Req,
   UseGuards,
   UsePipes,
 } from "@nestjs/common";
@@ -11,23 +10,52 @@ import { CurrentUser } from "src/auth/current-user-decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { UserPayload } from "src/auth/jwt.strategy";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
+import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
 
-const createQuestionBodySchema = z.object({});
+const createQuestionBodySchema = z.object({
+  title: z.string(),
+  content: z.string(),
+});
 
 type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>;
 
 @Controller("/questions")
 @UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
-  constructor() {}
+  constructor(private prisma: PrismaService) {}
 
   @Post()
-  @HttpCode(200)
-  @UsePipes(new ZodValidationPipe(createQuestionBodySchema))
-  async handle(@CurrentUser() user: UserPayload) {
-    console.log(user);
+  @HttpCode(201)
+  async handle(
+    @CurrentUser() user: UserPayload,
+    @Body(new ZodValidationPipe(createQuestionBodySchema)) //É possível usar o pipe dentro do body
+    body: CreateQuestionBodySchema
+  ) {
+    const { title, content } = body;
+    const userId = user.sub;
 
-    return "ok";
+    const slug = this.slugify(title);
+
+    await this.prisma.question.create({
+      data: {
+        authorId: userId,
+        title,
+        content,
+        slug,
+      },
+    });
+  }
+
+  private slugify(title: string): string {
+    return title
+      .normalize("NFD") // Normaliza a string removendo diacríticos
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+      .toLowerCase() // Converte para minúsculas
+      .replace(/[^\w\s-]/g, "") // Remove caracteres não alfanuméricos exceto espaços e hífens
+      .replace(/\s+/g, "-") // Substitui espaços por hífens
+      .replace(/--+/g, "-") // Remove múltiplos hífens por apenas um
+      .replace(/^-+/, "") // Remove hífens do início da string
+      .replace(/-+$/, ""); // Remove hífens do final da string
   }
 }
