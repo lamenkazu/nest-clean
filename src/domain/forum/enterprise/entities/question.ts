@@ -8,7 +8,7 @@ import { QuestionBestAnswerChosenEvent } from "../events/question-best-answer-ch
 
 export interface QuestionProps {
   authorId: UniqueEntityId;
-  bestAnswerId?: UniqueEntityId;
+  bestAnswerId?: UniqueEntityId | null;
   attachments: QuestionAttachmentList;
   title: string;
   content: string;
@@ -95,8 +95,8 @@ export class Question extends AggregateRoot<QuestionProps> {
     this.touch();
   }
 
-  set bestAnswerId(bestAnswerId: UniqueEntityId | undefined) {
-    if (bestAnswerId === undefined) return;
+  set bestAnswerId(bestAnswerId: UniqueEntityId | undefined | null) {
+    if (!bestAnswerId || bestAnswerId === undefined) return;
 
     if (
       this.props.bestAnswerId === undefined ||
