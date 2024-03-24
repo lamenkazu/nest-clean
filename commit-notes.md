@@ -13,3 +13,9 @@ No client.http foi implementada uma forma automática de pegar o token da autent
 Nota: alteração do autenticate-controller para authenticate.controller pra manter o padrão do projeto.
 
 Neste Commit foi criado o Param Decorator que é capaz de pegar os dados do payload do user através do Token.
+
+Neste commit, foi entendido sobre injeção de dependência no NestJS e como lidar com Services que não possuem um @Injectable.
+Entre a alternativa de criar uma classe nova na camada de infraestrutura que extende o Service
+Foi optado por sujar o domain com a @Injectable diretamente, sabendo que vai contra a regra de desacoplamento da Clean Architecture.
+
+Também foi modificado o uso de interfaces repositories para classes abstratas que possuem métodos abstratos, para a utilização no NestJS, que precisa disso para a injeção de dependência.
