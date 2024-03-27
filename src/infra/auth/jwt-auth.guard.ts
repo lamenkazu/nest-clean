@@ -10,14 +10,15 @@ import { IS_PUBLIC_KEY } from "./public";
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { Env } from "../env";
+import { Env } from "../env/env";
+import { EnvService } from "../env/env.service";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
-    private config: ConfigService<Env, true>
+    private env: EnvService
   ) {
     super();
   }
@@ -38,7 +39,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const privateKey = this.config.get("JWT_PRIVATE_KEY", { infer: true });
+      const privateKey = this.env.get("JWT_PRIVATE_KEY");
 
       const payload = await this.jwtService.verifyAsync(token, {
         secret: Buffer.from(privateKey, "base64"),
