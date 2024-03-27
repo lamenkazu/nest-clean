@@ -22,3 +22,7 @@ Também foi modificado o uso de interfaces repositories para classes abstratas q
 
 Neste Commit foi iniciada a configuração de gateway entre os casos de uso e as funções de criptografia. Para isso foi pensada a Interface Segregation dos SOLID principes, que separa as interfaces (tidas como classes abstradas por causa do NestJS) de critografia para que não seja necessário que toda classe precise implementar todos os métodos da criptografia (hash e compare)
 Além disso foi adicionado os dados do estudante email e senha no domain.
+
+Neste commit foi iniciada a configuração para cadastro e autenticação de estudantes.
+Foi feita a verificação se já existe um aluno com o mesmo email cadastrado. Em caso positivo, retorna um erro. Em seguida, a comparação da senha informada com a senha armazenada no banco de dados. Se forem diferentes, retorna um erro. Caso contrario, é gerado um token de acesso e ele é retornado.
+Tudo isso foi feito em uma nova camada na parte de domínio da aplicação, Account.
