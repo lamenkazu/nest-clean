@@ -11,6 +11,7 @@ import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
 import { RegisterStudentService } from "@/domain/account/application/services/register-student";
 import { StudentAlreadyExistsError } from "@/domain/account/application/services/errors/student-already-exists-error";
+import { Public } from "@/infra/auth/public";
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -21,6 +22,7 @@ const createAccountBodySchema = z.object({
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>;
 
 @Controller("/accounts")
+@Public()
 export class CreateAccountController {
   constructor(private registerStudent: RegisterStudentService) {}
 

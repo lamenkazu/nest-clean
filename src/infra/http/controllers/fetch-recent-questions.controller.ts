@@ -1,16 +1,9 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  HttpCode,
-  Query,
-  UseGuards,
-} from "@nestjs/common";
-import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
+import { BadRequestException, Controller, Get, Query } from "@nestjs/common";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
 import { KnowRecentQuestionsService } from "@/domain/forum/application/services/know-recent-questions";
 import { QuestionPresenter } from "../presenters/question-presenter";
+import { Public } from "@/infra/auth/public";
 
 const pageQueryParamsSchema = z
   .string()
@@ -24,7 +17,6 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamsSchema);
 type PageQueryParamSchema = z.infer<typeof pageQueryParamsSchema>;
 
 @Controller("/questions")
-@UseGuards(JwtAuthGuard)
 export class FetchRecentQuestionsController {
   constructor(private knowRecentQuestions: KnowRecentQuestionsService) {}
 
