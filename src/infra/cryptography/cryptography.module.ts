@@ -24,4 +24,4 @@ import { HashGenerator } from "@/domain/account/application/cryptography/hash-ge
   ],
   exports: [Encrypter, HashGenerator, HashComparer],
 })
-export class CruptographyModule {}
+export class CryptographyModule {}

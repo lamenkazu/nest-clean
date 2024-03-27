@@ -6,15 +6,23 @@ import { FetchRecentQuestionsController } from "./controllers/fetch-recent-quest
 import { DatabaseModule } from "../database/prisma/database.module";
 import { CreateQuestionService } from "@/domain/forum/application/services/create-question";
 import { KnowRecentQuestionsService } from "@/domain/forum/application/services/know-recent-questions";
+import { RegisterStudentService } from "@/domain/account/application/services/register-student";
+import { AuthenticateStudentService } from "@/domain/account/application/services/authenticate-student";
+import { CryptographyModule } from "../cryptography/cryptography.module";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
     CreateQuestionController,
     FetchRecentQuestionsController,
   ],
-  providers: [CreateQuestionService, KnowRecentQuestionsService],
+  providers: [
+    CreateQuestionService,
+    KnowRecentQuestionsService,
+    RegisterStudentService,
+    AuthenticateStudentService,
+  ],
 })
 export class HttpModule {}
