@@ -19,3 +19,6 @@ Entre a alternativa de criar uma classe nova na camada de infraestrutura que ext
 Foi optado por sujar o domain com a @Injectable diretamente, sabendo que vai contra a regra de desacoplamento da Clean Architecture.
 
 Também foi modificado o uso de interfaces repositories para classes abstratas que possuem métodos abstratos, para a utilização no NestJS, que precisa disso para a injeção de dependência.
+
+Neste Commit foi iniciada a configuração de gateway entre os casos de uso e as funções de criptografia. Para isso foi pensada a Interface Segregation dos SOLID principes, que separa as interfaces (tidas como classes abstradas por causa do NestJS) de critografia para que não seja necessário que toda classe precise implementar todos os métodos da criptografia (hash e compare)
+Além disso foi adicionado os dados do estudante email e senha no domain.

@@ -3,6 +3,8 @@ import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 
 interface StudentProps {
   name: string;
+  email: string;
+  password: string;
 }
 
 export class Student extends Entity<StudentProps> {
@@ -12,19 +14,13 @@ export class Student extends Entity<StudentProps> {
     return student;
   }
 
-  /**
-   * Getter $name
-   * @return {string}
-   */
   public get name(): string {
     return this.name;
   }
-
-  /**
-   * Setter $name
-   * @param {string} value
-   */
-  public set name(value: string) {
-    this.name = value;
+  public get email(): string {
+    return this.email;
+  }
+  public get password(): string {
+    return this.password;
   }
 }
