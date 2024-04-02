@@ -10,6 +10,7 @@ import { QuestionsRepository } from "../repositories/questions-repository";
 import { QuestionAttachmentsRepository } from "../repositories/question-attachments-repository";
 
 import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list";
+import { Injectable } from "@nestjs/common";
 
 interface EditQuestionServiceRequest {
   authorId: string;
@@ -26,6 +27,7 @@ type EditQuestionServiceResponse = Either<
   }
 >;
 
+@Injectable()
 export class EditQuestionService {
   constructor(
     private questionRepo: QuestionsRepository,
