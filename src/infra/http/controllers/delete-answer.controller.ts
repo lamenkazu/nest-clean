@@ -7,23 +7,23 @@ import {
 } from "@nestjs/common";
 import { CurrentUser } from "@/infra/auth/current-user-decorator";
 import { UserPayload } from "@/infra/auth/jwt.strategy";
-import { DeleteQuestionService } from "@/domain/forum/application/services/delete-question";
+import { DeleteAnswerService } from "@/domain/forum/application/services/delete-answer";
 
-@Controller("/questions/:id")
-export class DeleteQuestionController {
-  constructor(private deleteQuestion: DeleteQuestionService) {}
+@Controller("/answers/:id")
+export class DeleteAnswerController {
+  constructor(private deleteAnswer: DeleteAnswerService) {}
 
   @Delete()
   @HttpCode(204)
   async handle(
     @CurrentUser() user: UserPayload,
-    @Param("id") questionId: string
+    @Param("id") answerId: string
   ) {
     const userId = user.sub;
 
-    const result = await this.deleteQuestion.execute({
+    const result = await this.deleteAnswer.execute({
       authorId: userId,
-      questionId,
+      answerId,
     });
 
     if (result.isLeft()) {
