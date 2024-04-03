@@ -4,9 +4,10 @@ import { QuestionsRepository } from "../repositories/questions-repository";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
+import { Injectable } from "@nestjs/common";
 
 interface ChooseBestAnswerServiceRequest {
-  questionAuthorId: string;
+  authorId: string;
   answerId: string;
 }
 
@@ -17,6 +18,7 @@ type ChooseBestAnswerServiceResponse = Either<
   }
 >;
 
+@Injectable()
 export class ChooseBestAnswerService {
   constructor(
     private questionRepo: QuestionsRepository,
@@ -24,7 +26,7 @@ export class ChooseBestAnswerService {
   ) {}
 
   async execute({
-    questionAuthorId,
+    authorId,
     answerId,
   }: ChooseBestAnswerServiceRequest): Promise<ChooseBestAnswerServiceResponse> {
     const answer = await this.answerRepo.findById(answerId);
@@ -35,7 +37,7 @@ export class ChooseBestAnswerService {
     );
     if (!question) return left(new ResourceNotFoundError());
 
-    if (questionAuthorId !== question.authorId.toString())
+    if (authorId !== question.authorId.toString())
       return left(new NotAllowedError());
 
     question.bestAnswerId = answer.id;

@@ -9,14 +9,14 @@ import { AnswerFactory } from "test/factories/make-answer";
 import { QuestionFactory } from "test/factories/make-question";
 import { StudentFactory } from "test/factories/make-student";
 
-describe("Edit Answer (E2E)", () => {
+describe("Comment On Answer (E2E)", () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jwt: JwtService;
 
   let studentFactory: StudentFactory;
-  let answerFactory: AnswerFactory;
   let questionFactory: QuestionFactory;
+  let answerFactory: AnswerFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -36,7 +36,7 @@ describe("Edit Answer (E2E)", () => {
     await app.init();
   });
 
-  test("[PUT] /answers/:id", async () => {
+  test("[POST] /answers/:answerId/comments", async () => {
     const user = await studentFactory.makePrismaStudent();
 
     const accessToken = jwt.sign({ sub: user.id.toString() });
@@ -46,27 +46,25 @@ describe("Edit Answer (E2E)", () => {
     });
 
     const answer = await answerFactory.makePrismaAnswer({
-      questionId: question.id,
       authorId: user.id,
+      questionId: question.id,
     });
 
-    const answerId = answer.id.toString();
-
     const response = await request(app.getHttpServer())
-      .put(`/answers/${answerId}`)
+      .post(`/answers/${answer.id.toString()}/comments`)
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
-        content: "New answer content",
+        content: "New comment",
       });
 
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(201);
 
-    const answerOnDatabase = await prisma.answer.findFirst({
+    const commentOnDatabase = await prisma.comment.findFirst({
       where: {
-        content: "New answer content",
+        content: "New comment",
       },
     });
 
-    expect(answerOnDatabase).toBeTruthy();
+    expect(commentOnDatabase).toBeTruthy();
   });
 });
