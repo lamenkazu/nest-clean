@@ -4,10 +4,14 @@ import { Question } from "@/domain/forum/enterprise/entities/question";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 
 @Injectable()
 export class PrismaQuestionRepository implements QuestionsRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private questionAttachmentsRepo: QuestionAttachmentsRepository
+  ) {}
 
   async create(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question);
@@ -15,17 +19,31 @@ export class PrismaQuestionRepository implements QuestionsRepository {
     await this.prisma.question.create({
       data,
     });
+
+    await this.questionAttachmentsRepo.createMany(
+      question.attachments.getItems()
+    );
   }
 
   async update(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question);
 
-    await this.prisma.question.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    });
+    await Promise.all([
+      this.prisma.question.update({
+        where: {
+          id: data.id,
+        },
+        data,
+      }),
+
+      this.questionAttachmentsRepo.createMany(
+        question.attachments.getNewItems()
+      ),
+
+      this.questionAttachmentsRepo.deleteMany(
+        question.attachments.getRemovedItems()
+      ),
+    ]);
   }
 
   async delete(question: Question): Promise<void> {
