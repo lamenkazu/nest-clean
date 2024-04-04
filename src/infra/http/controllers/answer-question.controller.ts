@@ -14,6 +14,7 @@ import { AnswerQuestionService } from "@/domain/forum/application/services/answe
 
 const answerQuestionBodySchema = z.object({
   content: z.string(),
+  attachments: z.array(z.string().uuid()),
 });
 
 type AnswerQuestionBodySchema = z.infer<typeof answerQuestionBodySchema>;
@@ -30,13 +31,13 @@ export class AnswerQuestionController {
     body: AnswerQuestionBodySchema,
     @Param("questionId") questionId: string
   ) {
-    const { content } = body;
+    const { content, attachments } = body;
     const userId = user.sub;
 
     const result = await this.answerQuestion.execute({
       content,
       authorId: userId,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
       questionId,
     });
 

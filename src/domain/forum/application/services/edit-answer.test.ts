@@ -88,4 +88,51 @@ describe("Edit Answer", () => {
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(NotAllowedError);
   });
+
+  it("should sync new and removed attachments when editing an answer", async () => {
+    const testAnswerId = "answer-id-1";
+    const testAuthorId = "author-id-1";
+
+    const testAnswer = makeAnswer(
+      {
+        authorId: new UniqueEntityId(testAuthorId),
+      },
+      new UniqueEntityId(testAnswerId)
+    );
+
+    await inMemoryAnswersRepo.create(testAnswer);
+
+    inMemoryAnswerAttachsRepo.items.push(
+      makeAnswerAttachment({
+        answerId: testAnswer.id,
+        attachmentId: new UniqueEntityId("1"),
+      }),
+      makeAnswerAttachment({
+        answerId: testAnswer.id,
+        attachmentId: new UniqueEntityId("2"),
+      })
+    );
+
+    const result = await sut.execute({
+      authorId: testAuthorId,
+      answerId: testAnswer.id.toValue(),
+      content: "Conteúdo teste",
+      attachmentsIds: ["1", "3"],
+    });
+
+    expect(result.isRight()).toBeTruthy();
+
+    expect(inMemoryAnswerAttachsRepo.items).toHaveLength(2);
+
+    expect(inMemoryAnswerAttachsRepo.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityId("1"),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityId("3"),
+        }),
+      ])
+    );
+  });
 });
