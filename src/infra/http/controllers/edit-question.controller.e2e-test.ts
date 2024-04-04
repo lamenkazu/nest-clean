@@ -5,7 +5,9 @@ import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
+import { AttachmentFactory } from "test/factories/make-attachment";
 import { QuestionFactory } from "test/factories/make-question";
+import { QuestionAttachmentFactory } from "test/factories/make-question-attachment";
 import { StudentFactory } from "test/factories/make-student";
 
 describe("Edit Question (E2E)", () => {
@@ -16,10 +18,18 @@ describe("Edit Question (E2E)", () => {
   let studentFactory: StudentFactory;
   let questionFactory: QuestionFactory;
 
+  let attachFactory: AttachmentFactory;
+  let questionAttachFactory: QuestionAttachmentFactory;
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory, QuestionFactory],
+      providers: [
+        StudentFactory,
+        QuestionFactory,
+        AttachmentFactory,
+        QuestionAttachmentFactory,
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -30,6 +40,9 @@ describe("Edit Question (E2E)", () => {
     studentFactory = moduleRef.get(StudentFactory);
     questionFactory = moduleRef.get(QuestionFactory);
 
+    attachFactory = moduleRef.get(AttachmentFactory);
+    questionAttachFactory = moduleRef.get(QuestionAttachmentFactory);
+
     await app.init();
   });
 
@@ -38,9 +51,27 @@ describe("Edit Question (E2E)", () => {
 
     const accessToken = jwt.sign({ sub: user.id.toString() });
 
+    //Cria dois attachments
+    const attach1 = await attachFactory.makePrismaAttachment();
+    const attach2 = await attachFactory.makePrismaAttachment();
+
     const question = await questionFactory.makePrismaQuestion({
       authorId: user.id,
     });
+
+    //relaciona os attachments com a question
+    await questionAttachFactory.makePrismaAttachment({
+      attachmentId: attach1.id,
+      questionId: question.id,
+    });
+
+    await questionAttachFactory.makePrismaAttachment({
+      attachmentId: attach2.id,
+      questionId: question.id,
+    });
+
+    //Testa edição do Attachment
+    const attach3 = await attachFactory.makePrismaAttachment();
 
     const response = await request(app.getHttpServer())
       .put(`/questions/${question.id.toString()}`)
@@ -48,6 +79,7 @@ describe("Edit Question (E2E)", () => {
       .send({
         title: "New title",
         content: "New content",
+        attachments: [attach1.id.toString(), attach3.id.toString()],
       });
 
     expect(response.statusCode).toBe(204);
@@ -60,5 +92,23 @@ describe("Edit Question (E2E)", () => {
     });
 
     expect(questionOnDatabase).toBeTruthy();
+
+    const attachmentsOnDatabase = await prisma.attachment.findMany({
+      where: {
+        questionId: questionOnDatabase?.id,
+      },
+    });
+
+    expect(attachmentsOnDatabase).toHaveLength(2);
+    expect(attachmentsOnDatabase).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: attach1.id.toString(),
+        }),
+        expect.objectContaining({
+          id: attach3.id.toString(),
+        }),
+      ])
+    );
   });
 });
