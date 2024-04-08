@@ -40,6 +40,8 @@ import { FetchAnswerCommentsService } from "@/domain/forum/application/services/
 import { UploadAttachmentController } from "./controllers/upload-attachment.controller";
 import { StorageModule } from "../storage/storage.module";
 import { UploadAndCreateAttachmentService } from "@/domain/forum/application/services/upload-and-create-attachment";
+import { ReadNotificationController } from "./controllers/read-notification.controller";
+import { ReadNotificationService } from "@/domain/notification/application/services/read-notification";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -63,6 +65,7 @@ import { UploadAndCreateAttachmentService } from "@/domain/forum/application/ser
     FetchQuestionCommentsController,
     FetchAnswerCommentsController,
     UploadAttachmentController,
+    ReadNotificationController,
   ],
   providers: [
     CreateQuestionService,
@@ -84,6 +87,7 @@ import { UploadAndCreateAttachmentService } from "@/domain/forum/application/ser
     FetchQuestionCommentsService,
     FetchAnswerCommentsService,
     UploadAndCreateAttachmentService,
+    ReadNotificationService,
   ],
 })
 export class HttpModule {}
