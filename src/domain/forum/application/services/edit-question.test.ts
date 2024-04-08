@@ -5,7 +5,11 @@ import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
 import { makeQuestionAttachment } from "test/factories/make-question-attachment";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let sut: EditQuestionService;
@@ -13,8 +17,13 @@ let sut: EditQuestionService;
 describe("Edit Question", () => {
   beforeEach(() => {
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
     inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
     );
     sut = new EditQuestionService(
       inMemoryQuestionsRepo,

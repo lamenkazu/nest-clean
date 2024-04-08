@@ -5,7 +5,11 @@ import { InMemoryQuestionRepository } from "test/repositories/in-memory-question
 import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-question-comments-repository";
 import { CommentOnQuestionService } from "./comment-on-question";
 import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
 let inMemoryQuestionCommentsRepo: InMemoryQuestionCommentsRepository;
@@ -14,10 +18,17 @@ let sut: CommentOnQuestionService;
 describe("Comment on Question", () => {
   beforeEach(() => {
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
     inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
     );
-    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository();
+    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepo
+    );
 
     sut = new CommentOnQuestionService(
       inMemoryQuestionsRepo,

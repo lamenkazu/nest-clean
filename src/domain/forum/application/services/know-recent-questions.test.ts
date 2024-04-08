@@ -2,7 +2,11 @@ import { InMemoryQuestionRepository } from "test/repositories/in-memory-question
 import { makeQuestion } from "test/factories/make-question";
 import { KnowRecentQuestionsService } from "./know-recent-questions";
 import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let sut: KnowRecentQuestionsService;
@@ -10,8 +14,13 @@ let sut: KnowRecentQuestionsService;
 describe("Know Recent Questions", () => {
   beforeEach(() => {
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
     inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
     );
     sut = new KnowRecentQuestionsService(inMemoryQuestionsRepo);
   });

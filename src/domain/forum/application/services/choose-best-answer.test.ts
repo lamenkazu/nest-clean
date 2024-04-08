@@ -9,7 +9,11 @@ import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryAnswerAttachsRepo: InMemoryAnswerAttachmentsRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
@@ -20,9 +24,16 @@ describe("Choose Best Answer", () => {
   beforeEach(() => {
     inMemoryAnswerAttachsRepo = new InMemoryAnswerAttachmentsRepository();
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
+
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
     inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
     );
+
     inMemoryAnswersRepo = new InMemoryAnswersRepository(
       inMemoryAnswerAttachsRepo
     );

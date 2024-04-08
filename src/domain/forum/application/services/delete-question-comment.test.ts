@@ -5,13 +5,19 @@ import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-
 import { DeleteQuestionCommentService } from "./delete-question-comment";
 import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
 
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryQuestionCommentsRepo: InMemoryQuestionCommentsRepository;
 let sut: DeleteQuestionCommentService;
 
 describe("Delete Question Comment", () => {
   beforeEach(() => {
-    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
+    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepo
+    );
 
     sut = new DeleteQuestionCommentService(inMemoryQuestionCommentsRepo);
   });
