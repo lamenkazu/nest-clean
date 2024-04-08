@@ -26,3 +26,15 @@ Além disso foi adicionado os dados do estudante email e senha no domain.
 Neste commit foi iniciada a configuração para cadastro e autenticação de estudantes.
 Foi feita a verificação se já existe um aluno com o mesmo email cadastrado. Em caso positivo, retorna um erro. Em seguida, a comparação da senha informada com a senha armazenada no banco de dados. Se forem diferentes, retorna um erro. Caso contrario, é gerado um token de acesso e ele é retornado.
 Tudo isso foi feito em uma nova camada na parte de domínio da aplicação, Account.
+
+# ✨ Registrando Eventos de Domínio
+
+Neste Commit foi configurado os eventos de domínio no projeto na Infraestrutura.
+
+Foi criado então o diretório de eventos que possui o seu próprio módulo: events.module.ts, e então adicionada ao app.module.ts
+
+Na camada de Domínio, tanto os services de Notificaion quanto os subscribers precisam de um Injectable para funcionar corretamente no NestJS.
+
+Entidade Notificaion foi alterada para classe abstrata.
+
+o Schema.Prisma foi atualizado para a tabela notifications, e além disso, foram feito ajustes no repositorio do Prisma, criando um novo repositório de notificações. Ainda há alguns ajustes a serem feitos para que os eventos sejam disparados corretamente.
