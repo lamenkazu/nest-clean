@@ -23,7 +23,7 @@ import { DeleteAnswerController } from "./controllers/delete-answer.controller";
 import { DeleteAnswerService } from "@/domain/forum/application/services/delete-answer";
 import { FetchQuestionAnswersController } from "./controllers/fetch-question-answers.controller";
 import { FetchQuestionAnswersService } from "@/domain/forum/application/services/fetch-question-answers";
-import { ChooseBestAnswerController } from "./controllers/choose-question-best-answer.cotroller";
+import { ChooseBestAnswerController } from "./controllers/choose-question-best-answer.controller";
 import { ChooseBestAnswerService } from "@/domain/forum/application/services/choose-best-answer";
 import { CommentOnQuestionController } from "./controllers/comment-on-question.controller";
 import { CommentOnQuestionService } from "@/domain/forum/application/services/comment-on-question";
