@@ -16,14 +16,16 @@ import { waitFor } from "test/utils/wait-for";
 import { OnCommentedQuestion } from "./on-commented-question";
 import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-question-comments-repository";
 import { makeQuestionComment } from "test/factories/make-question-comment";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryNotificationRepo: InMemoryNotificationRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionCommentsRepo: InMemoryQuestionCommentsRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
 let sendNotificationService: SendNotificationService;
-let inMemoryAnswerAttachsRepo: InMemoryAnswerAttachmentsRepository;
-let inMemoryAnswersRepo: InMemoryAnswersRepository;
 
 let sendNotificationExecuteSpy: MockInstance<
   [SendNotificationServiceRequest],
@@ -33,11 +35,17 @@ let sendNotificationExecuteSpy: MockInstance<
 describe("On Commented Question", () => {
   beforeEach(() => {
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
-    inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
-    );
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
 
-    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository();
+    inMemoryQuestionsRepo = new InMemoryQuestionRepository(
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
+    );
+    inMemoryQuestionCommentsRepo = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepo
+    );
 
     inMemoryNotificationRepo = new InMemoryNotificationRepository();
     sendNotificationService = new SendNotificationService(

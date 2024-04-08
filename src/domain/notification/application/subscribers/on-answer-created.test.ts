@@ -13,7 +13,11 @@ import { InMemoryNotificationRepository } from "test/repositories/in-memory-noti
 import { makeQuestion } from "test/factories/make-question";
 import { MockInstance } from "vitest";
 import { waitFor } from "test/utils/wait-for";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
 
+let inMemoryAttachsRepo: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryNotificationRepo: InMemoryNotificationRepository;
 let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionsRepo: InMemoryQuestionRepository;
@@ -29,8 +33,13 @@ let sendNotificationExecuteSpy: MockInstance<
 describe("On Answer Created", () => {
   beforeEach(() => {
     inMemoryQuestionAttachsRepo = new InMemoryQuestionAttachmentsRepository();
+    inMemoryAttachsRepo = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
     inMemoryQuestionsRepo = new InMemoryQuestionRepository(
-      inMemoryQuestionAttachsRepo
+      inMemoryQuestionAttachsRepo,
+      inMemoryAttachsRepo,
+      inMemoryStudentsRepo
     );
 
     inMemoryAnswerAttachsRepo = new InMemoryAnswerAttachmentsRepository();

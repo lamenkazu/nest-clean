@@ -6,19 +6,17 @@ import {
   SendNotificationServiceRequest,
   SendNotificationServiceResponse,
 } from "../services/send-notification";
-import { InMemoryQuestionRepository } from "test/repositories/in-memory-questions-repository";
-import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
 import { InMemoryNotificationRepository } from "test/repositories/in-memory-notifications-repository";
 import { MockInstance } from "vitest";
 import { waitFor } from "test/utils/wait-for";
 import { OnCommentedAnswer } from "./on-commented-answer";
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository";
 import { makeAnswerComment } from "test/factories/make-answer-comment";
+import { InMemoryStudentRepository } from "test/repositories/in-memory-students-repository";
 
+let inMemoryStudentsRepo: InMemoryStudentRepository;
 let inMemoryNotificationRepo: InMemoryNotificationRepository;
-let inMemoryQuestionAttachsRepo: InMemoryQuestionAttachmentsRepository;
 let inMemoryAnswerCommentsRepo: InMemoryAnswerCommentsRepository;
-let inMemoryQuestionsRepo: InMemoryQuestionRepository;
 let sendNotificationService: SendNotificationService;
 let inMemoryAnswerAttachsRepo: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswersRepo: InMemoryAnswersRepository;
@@ -35,7 +33,11 @@ describe("On Commented Question", () => {
       inMemoryAnswerAttachsRepo
     );
 
-    inMemoryAnswerCommentsRepo = new InMemoryAnswerCommentsRepository();
+    inMemoryStudentsRepo = new InMemoryStudentRepository();
+
+    inMemoryAnswerCommentsRepo = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepo
+    );
 
     inMemoryNotificationRepo = new InMemoryNotificationRepository();
     sendNotificationService = new SendNotificationService(
