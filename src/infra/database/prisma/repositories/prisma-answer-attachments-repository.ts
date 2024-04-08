@@ -25,6 +25,8 @@ export class PrismaAnswerAttachmentsRepository
       return attach.attachmentId.toString();
     });
 
+    console.log(attachmentsIds);
+
     await this.prisma.attachment.deleteMany({
       where: {
         id: {

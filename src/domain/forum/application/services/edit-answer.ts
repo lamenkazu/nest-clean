@@ -61,6 +61,9 @@ export class EditAnswerService {
 
     answer.attachments = answerAttachmentList;
 
+    console.log(attachmentsIds);
+    console.log(answerAttachmentList);
+
     answer.content = content;
 
     await this.answerRepo.update(answer);

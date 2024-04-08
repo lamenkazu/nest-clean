@@ -59,14 +59,14 @@ describe("Edit Answer (E2E)", () => {
       authorId: user.id,
     });
 
-    // Cria dois attachments
-    const attach1 = await attachmentFactory.makePrismaAttachment();
-    const attach2 = await attachmentFactory.makePrismaAttachment();
-
     const answer = await answerFactory.makePrismaAnswer({
       questionId: question.id,
       authorId: user.id,
     });
+
+    // Cria dois attachments
+    const attach1 = await attachmentFactory.makePrismaAttachment();
+    const attach2 = await attachmentFactory.makePrismaAttachment();
 
     //Relaciona os attachments com as answers
     await answerAttachFactory.makePrismaAttachment({
@@ -107,6 +107,8 @@ describe("Edit Answer (E2E)", () => {
         answerId: answerOnDatabase?.id,
       },
     });
+
+    console.log(attachmentsOnDatabase);
 
     expect(attachmentsOnDatabase).toHaveLength(2);
     expect(attachmentsOnDatabase).toEqual(

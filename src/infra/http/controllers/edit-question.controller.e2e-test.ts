@@ -99,6 +99,8 @@ describe("Edit Question (E2E)", () => {
       },
     });
 
+    console.log(attachmentsOnDatabase);
+
     expect(attachmentsOnDatabase).toHaveLength(2);
     expect(attachmentsOnDatabase).toEqual(
       expect.arrayContaining([

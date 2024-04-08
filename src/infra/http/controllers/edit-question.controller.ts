@@ -15,7 +15,7 @@ import { EditQuestionService } from "@/domain/forum/application/services/edit-qu
 const editQuestionBodySchema = z.object({
   title: z.string(),
   content: z.string(),
-  attachments: z.array(z.string().uuid()),
+  attachments: z.array(z.string().uuid()).default([]),
 });
 
 type EditQuestionBodySchema = z.infer<typeof editQuestionBodySchema>;
@@ -34,6 +34,8 @@ export class EditQuestionController {
   ) {
     const { title, content, attachments } = body;
     const userId = user.sub;
+
+    console.log(attachments);
 
     const result = await this.editQuestion.execute({
       title,

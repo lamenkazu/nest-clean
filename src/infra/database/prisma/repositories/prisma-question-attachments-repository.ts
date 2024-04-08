@@ -22,7 +22,7 @@ export class PrismaQuestionAttachmentsRepository
     if (attachments.length === 0) return;
 
     const attachmentsIds = attachments.map((attach) => {
-      return attach.id.toString();
+      return attach.attachmentId.toString();
     });
 
     await this.prisma.attachment.deleteMany({

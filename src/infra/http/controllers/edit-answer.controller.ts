@@ -14,7 +14,7 @@ import { EditAnswerService } from "@/domain/forum/application/services/edit-answ
 
 const editAnswerBodySchema = z.object({
   content: z.string(),
-  attachments: z.array(z.string().uuid()),
+  attachments: z.array(z.string().uuid()).default([]),
 });
 
 type EditAnswerBodySchema = z.infer<typeof editAnswerBodySchema>;

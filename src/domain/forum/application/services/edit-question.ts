@@ -68,6 +68,9 @@ export class EditQuestionService {
     question.title = title;
     question.content = content;
 
+    console.log(attachmentsIds);
+    console.log(questionAttachmentList);
+
     await this.questionRepo.update(question);
 
     return right({
