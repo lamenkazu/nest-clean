@@ -9,7 +9,7 @@ import { AnswerCommentFactory } from "test/factories/make-answer-comment";
 import { QuestionFactory } from "test/factories/make-question";
 import { StudentFactory } from "test/factories/make-student";
 
-describe.only("Fetch Answer Comments (E2E)", () => {
+describe("Fetch Answer Comments (E2E)", () => {
   let app: INestApplication;
   let jwt: JwtService;
 
@@ -42,7 +42,9 @@ describe.only("Fetch Answer Comments (E2E)", () => {
   });
 
   test.only("[GET] /answers/:answerId/comments", async () => {
-    const user = await studentFactory.makePrismaStudent();
+    const user = await studentFactory.makePrismaStudent({
+      name: "Jane Doe",
+    });
 
     const accessToken = jwt.sign({ sub: user.id.toString() });
 
@@ -77,8 +79,14 @@ describe.only("Fetch Answer Comments (E2E)", () => {
 
     expect(response.body).toEqual({
       comments: expect.arrayContaining([
-        expect.objectContaining({ content: "Comment 01" }),
-        expect.objectContaining({ content: "Comment 02" }),
+        expect.objectContaining({
+          content: "Comment 01",
+          author: expect.objectContaining({ name: "Jane Doe" }),
+        }),
+        expect.objectContaining({
+          content: "Comment 02",
+          author: expect.objectContaining({ name: "Jane Doe" }),
+        }),
       ]),
     });
   });
