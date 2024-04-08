@@ -1,8 +1,8 @@
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { Question } from "../../enterprise/entities/question";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Injectable } from "@nestjs/common";
+import { QuestionDetails } from "../../enterprise/entities/value-objects/question-details";
 
 interface KnowQuestionBySlugServiceRequest {
   slug: string;
@@ -11,7 +11,7 @@ interface KnowQuestionBySlugServiceRequest {
 type KnowQuestionBySlugServiceResponse = Either<
   ResourceNotFoundError,
   {
-    question: Question;
+    question: QuestionDetails;
   }
 >;
 
@@ -22,7 +22,7 @@ export class KnowQuestionBySlugService {
   async execute({
     slug,
   }: KnowQuestionBySlugServiceRequest): Promise<KnowQuestionBySlugServiceResponse> {
-    const question = await this.questionRepo.findBySlug(slug);
+    const question = await this.questionRepo.findDetailsBySlug(slug);
 
     if (!question) {
       return left(new ResourceNotFoundError());
